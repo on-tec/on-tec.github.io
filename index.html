@@ -1,23 +1,6 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta
-    http-equiv="Content-Security-Policy"
-    content="
-    connect-src
-        wss://*.smooch.io
-        https://*.smooch.io;
-    font-src
-        https://*.smooch.io;
-    script-src
-        https://*.smooch.io;
-    style-src
-        https://*.smooch.io;
-    img-src
-        blob:
-        https://*.gravatar.com
-        https://*.smooch.io;"
-/>
 
 <script>
     !function(o,p,s,e,c){
@@ -27,16 +10,52 @@
 </head>
 <body>
 <h1>Sunshine Conversations Demo</h1>
-<p>Please click the widget below</p>
+<p>Please click the widget below (v2)</p>
 
 
 <script>
-    Smooch.init({ integrationId: '5ffdb2110e3be2000c555ffa' }).then(
+Smooch.init({
+    integrationId: '5ffdb6f6273d6e000ce981a9',
+    locale: 'ru',
+    customText: {
+        // ...
+        conversationTimestampHeaderFormat: 'DD MMMM YYYY, hh:mm',
+        // ...
+    }
+})
+    .then(
         function() {
-            // Your code after init is complete
+             fetch('https://wdcf722l3j.execute-api.eu-west-1.amazonaws.com/Prod').then(function(response) {
+               return response.json();
+             }).then(function(data) {
+               console.log(data.jwt);
+                Smooch.login('user-1234', data.jwt).then(
+                      function() {
+                          console.log('Login: success');
+                          Smooch.updateUser({
+                              givenName: 'Илья',
+                              surname: 'Муромец',
+                              email: 'muromets567543@gmail.com',
+                              signedUpAt: Date.now(),
+                              properties: {
+                                  premiumUser: true,
+                                  numberOfPurchases: 20,
+                                  itemsInCart: 3,
+                                  couponCode: 'PREM_USR'
+                              }
+                          });
+
+                      },
+                      function(err) {
+                         console.log(err);
+                     }
+               );
+             }).catch(function() {
+               console.log("Booo");
+             });
         },
         function(err) {
-            // Something went wrong during initialization
+            console.log(err);
         }
     );
 </script>
