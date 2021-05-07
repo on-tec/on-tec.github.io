@@ -1,6 +1,4 @@
 <!DOCTYPE html>
-<html lang="ru"> 
-
 <html>
 
 <title>REG.RU | Тестиирование виджета</title>
@@ -12,35 +10,21 @@
   <!-- Start of regru Zendesk Widget script -->
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fb0e924e-303e-400a-bbee-88480c6b919b"> </script>
 <!-- End of regru Zendesk Widget script -->
-<script> 
 
+<script type="text/javascript">
 zE('webWidget', 'setLocale', 'ru');
-
- window.zESettings = {
+  window.zESettings = {
     webWidget: {
-  contactOptions: {
-          enabled: true
       chat: {
-        suppress: false,
-  hideWhenOffline: false,
-  departments: { enabled: [], select: 'ЕСП' }
-      },
-      contactForm: {
-        suppress: false
-      },
-      helpCenter: {
-        suppress: false
-      },
-      talk: {
-        suppress: false
-      },
-      answerBot: {
-        suppress: false
+        departments: {enabled:[],
+          select: 'ЕСП'
+        }
       }
     }
   };
-
 </script>
+
+
 
 </head>
 <body>
