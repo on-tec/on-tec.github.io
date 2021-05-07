@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="ru"> 
+
+<html>
+
+<title>REG.RU | Тестиирование виджета</title>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+
+  <!-- Start of regru Zendesk Widget script -->
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=fb0e924e-303e-400a-bbee-88480c6b919b"> </script>
+<!-- End of regru Zendesk Widget script -->
+<script> 
+
+zE('webWidget', 'setLocale', 'ru');
+
+ window.zESettings = {
+    webWidget: {
+  contactOptions: {
+          enabled: true
+      chat: {
+        suppress: false,
+  hideWhenOffline: false,
+  departments: { enabled: [], select: 'ЕСП' }
+      },
+      contactForm: {
+        suppress: false
+      },
+      helpCenter: {
+        suppress: false
+      },
+      talk: {
+        suppress: false
+      },
+      answerBot: {
+        suppress: false
+      }
+    }
+  };
+
+</script>
+
+</head>
+<body>
+<h1>RegRu chat widget test page - general page</h1>
+<p>Опция чата будет доступна, если есть агеныты онлайн в отделе ЕСП</p>
+</body>
+
+
+</html>
