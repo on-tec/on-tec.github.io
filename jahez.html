@@ -29,13 +29,13 @@ Smooch.init({
                return response.json();
              }).then(function(data) {
                console.log(data.jwt);
-                Smooch.login('user-1234', data.jwt).then(
+                Smooch.login('user-12345', data.jwt).then(
                       function() {
                           console.log('Login: success');
                           Smooch.updateUser({
-                              givenName: 'Илья',
-                              surname: 'Муромец',
-                              email: 'mintsev@icloud.com',
+                              givenName: 'Ahmed',
+                              surname: 'Adam',
+                              email: 'anton@rosecx.com',
                               signedUpAt: Date.now(),
                               properties: {
                                   premiumUser: true,
