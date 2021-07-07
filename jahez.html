@@ -29,7 +29,7 @@ Smooch.init({
                return response.json();
              }).then(function(data) {
                console.log(data.jwt);
-                Smooch.login('user-12345', data.jwt).then(
+                Smooch.login('user-1234', data.jwt).then(
                       function() {
                           console.log('Login: success');
                           Smooch.updateUser({
