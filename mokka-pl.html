@@ -1,9 +1,7 @@
 <!DOCTYPE html>
 <html>
-
-<title>Widget test</title>
-
 <head>
+  <title>Widget test</title>
   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
   <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=abf4608c-cec2-41ec-a8a7-ce8bb649a3be"> </script>
   <script>
@@ -13,25 +11,29 @@
     });
     window.zESettings = {
       webWidget: {
+        launcher: {
+          label: {
+            pl: "Pomoc"
+          }
+        },
         chat: {
           suppress: true 
         },
-        contactForm: {
-          suppress: false
-        }
-      },
-      chat: {
-        departments: {
-          select: 'Poland'
-        },
-        title: {
-          '*': 'Chat with us!',
-          pl: 'Czat na żywo'
-        },
-        concierge: {
-          name: 'Mokka',
+        helpCenter: {
           title: {
-            '*': 'Live chat'
+            pl: "Pomoc"
+          },
+          searchPlaceholder: {
+            pl: "Wpisz swoje pytanie"
+          },
+          messageButton: {
+            pl: 'Skontaktuj się z nami'
+          }
+        },
+        contactForm: {
+          suppress: false,
+          title: {
+            pl: "Skontaktuj się z nami"
           }
         }
       }
