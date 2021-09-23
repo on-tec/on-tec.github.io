@@ -22,6 +22,7 @@ Smooch.init({
         conversationTimestampHeaderFormat: 'DD MMMM YYYY, hh:mm',
         // ...
     }
+
 })
     .then(function() {
         Smooch.login(
@@ -49,7 +50,35 @@ Smooch.init({
                     console.log(err);
                 }
             )
-    })
+    });
+
+Smooch.on('widget:opened', function () {
+    console.log('Widget is opened!');
+    //Get Conversation & Send Message
+  var Conversations = Smooch.getConversations()
+            if ( Conversations.length == 0){
+                //Create Conversation
+                Smooch.createConversation({
+                    displayName: "Welcome!!",
+                    description: "New Conversation",
+                });
+            } 
+            //Send Start Over on User's behalf to Trigger Answer Bot
+            //Smooch.getConversationById().then(function(conversation) {
+                //alert("Existing Conversation");
+                Smooch.sendMessage(
+                {
+                    type: 'text',
+                    text: 'Customer',
+                    metadata: {
+                      isHidden:true
+                    }
+                },
+                Conversations[0].id,
+                ); 
+                //}
+            //);
+});
 </script>
 </body>
 </html>

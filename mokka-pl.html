@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<title>Widget test</title>
+
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=abf4608c-cec2-41ec-a8a7-ce8bb649a3be"> </script>
+  <script>
+    zE('webWidget', 'setLocale', 'pl');
+    zE('webWidget', 'helpCenter:setSuggestions', { search: 'zakupowy' });
+    window.zESettings = {
+      webWidget: {
+        contactOptions: {
+          enabled: true,
+        }
+      },
+      chat: {
+        supress:true,
+        departments: {
+          select: 'Poland'
+        },
+        title: {
+          '*': 'Chat with us!',
+          pl: 'Czat na żywo'
+        },
+        concierge: {
+          name: 'Mokka',
+          title: {
+            '*': 'Live chat'
+          }
+        }
+      }
+    };
+  </script>
+
+</head>
+
+<body>
+  <h1>Mokka page example</h1>
+  <p>Classic Zendesk widget demo </p>
+</body>
+
+</html>
