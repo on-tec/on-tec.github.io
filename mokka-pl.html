@@ -8,15 +8,19 @@
   <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=abf4608c-cec2-41ec-a8a7-ce8bb649a3be"> </script>
   <script>
     zE('webWidget', 'setLocale', 'pl');
-    zE('webWidget', 'helpCenter:setSuggestions', { search: 'zakupowy' });
+    zE('webWidget', 'helpCenter:setSuggestions', {
+      search: 'zakupowy'
+    });
     window.zESettings = {
       webWidget: {
-        contactOptions: {
-          enabled: true,
+        chat: {
+          suppress: true 
+        },
+        contactForm: {
+          suppress: false
         }
       },
       chat: {
-        supress:true,
         departments: {
           select: 'Poland'
         },
