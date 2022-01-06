@@ -58,24 +58,24 @@ Smooch.on('widget:opened', function () {
   var Conversations = Smooch.getConversations()
             if ( Conversations.length == 0){
                 //Create Conversation
-                Smooch.createConversation({
-                    displayName: "Welcome!!",
-                    description: "New Conversation",
-                });
+//                Smooch.createConversation({
+//                    displayName: "Welcome!!",
+//                    description: "New Conversation",
+//                });
             } 
             //Send Start Over on User's behalf to Trigger Answer Bot
             //Smooch.getConversationById().then(function(conversation) {
                 //alert("Existing Conversation");
-                Smooch.sendMessage(
-                {
-                    type: 'text',
-                    text: 'Customer',
-                    metadata: {
-                      isHidden:true
-                    }
-                },
-                Conversations[0].id,
-                ); 
+//                Smooch.sendMessage(
+//                {
+//                    type: 'text',
+//                    text: 'Customer',
+//                    metadata: {
+//                      isHidden:true
+//                    }
+//                },
+//                Conversations[0].id,
+//                ); 
                 //}
             //);
 });
