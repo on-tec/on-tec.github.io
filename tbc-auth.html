@@ -21,6 +21,27 @@
       display: block;
       margin-bottom: 8px;
     }
+
+    #call-us-button {
+      background: #17494d;
+      color: white;
+      width: 150px;
+      height: 42px;
+      border-radius: 24px;
+      border: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Helvetica, sans-serif;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 24px;
+    }
+
+    #call-us-button:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
   </style>
 
 </head>
@@ -35,8 +56,12 @@
 </select>
 
 <!-- Start of d3v-ontec Zendesk Widget script -->
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=07928f1d-4284-47ee-8107-b8108958b6d9"> </script>
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=a954b0c9-4bb9-44fe-b9fc-e69151042ff4"> </script>
 <!-- End of d3v-ontec Zendesk Widget script -->
+
+<button id='call-us-button'>
+  Call us now
+</button>
 
 <script>
 zE('messenger', 'loginUser', function (callback) {
@@ -60,6 +85,12 @@ zE('messenger', 'loginUser', function (callback) {
   $('select').on('change', function(e) {
     console.log(this.value)
     zE('messenger:set', 'locale', this.value)
+
+const callUsButton = document.querySelector('#call-us-button')
+
+  callUsButton.onclick = () => {
+    zE('messenger:open', 'voice', 'd55e38235bfd7351ed0cc026b603f252')
+
   });
   
 </script>
