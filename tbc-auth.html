@@ -149,10 +149,30 @@
 
   const loginButton = document.querySelector('#login-button')
    
-  loginButton.onclick = () => {
+ loginButton.onclick = () => {
     zE('messenger', 'loginUser', function (callback) {
-  callback('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFwcF82NTJlNWFiYzJkNTU2NTJlOTE5YjI4ZTMifQ.eyJleHRlcm5hbF9pZCI6Ijk3MTU4NTY0MTg1OCIsIm5hbWUiOiJKb2huIFZlcmlmaWVkIiwiZW1haWwiOiJtaW50c2V2QGdtYWlsLmNvbSIsImVtYWlsX3ZlcmlmaWVkIjp0cnVlLCJzY29wZSI6InVzZXIifQ.0Y2Vg4XSq2xVp23qu0JkDGz_F5gHjiztOPxrj0JOUO8');
-}); }
+        // URL from where to fetch the JWT token
+        const tokenUrl = 'https://wdcf722l3j.execute-api.eu-west-1.amazonaws.com/Prod';
+        
+        // Fetch the JWT token from the endpoint
+        fetch(tokenUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response body as JSON
+            })
+            .then(data => {
+                // Use the fetched token (contained in the 'jwt' field of the JSON response) in the callback
+                callback(data.jwt);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    });
+};
+
+
   
   
     const logoutButton = document.querySelector('#logout-button')
