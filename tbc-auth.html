@@ -112,6 +112,10 @@
 <button id='login-button'>
   Login
 </button>
+
+<button id='set-segment'>
+  Set Segment
+</button>
   
   <button id='logout-button'>
   Logout
@@ -175,13 +179,21 @@
 
   
   
-    const logoutButton = document.querySelector('#logout-button')
+  const logoutButton = document.querySelector('#logout-button')
 
   logoutButton.onclick = () => {
     zE("messenger", "logoutUser")
+    zE('messenger:set', 'conversationFields', [{ id: "17495900552722", value: "seg_1_32"}])
+
 
 
   }
+
+  const setSegment = document.querySelector('#set-segment')
+  setSegment.onclick = () => {
+    zE('messenger:set', 'conversationFields', [{ id: "17495900552722", value: "seg_1_32"}])
+                            }
+
 
 </script>
 
