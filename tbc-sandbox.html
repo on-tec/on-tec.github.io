@@ -129,29 +129,7 @@
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=8d251460-2403-40ed-a345-48fa41d4558b"> </script>
 <!-- End of d3v-ontec Zendesk Widget script -->
 
-<script>
-    zE('messenger', 'loginUser', function (callback) {
-        // URL from where to fetch the JWT token
-        const tokenUrl = 'https://jsjggy3uyudfbwvdpt5dwg4p2i0ozfmo.lambda-url.eu-west-1.on.aws';
-        
-        // Fetch the JWT token from the endpoint
-        fetch(tokenUrl)
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json(); // Parse the response body as JSON
-            })
-            .then(data => {
-                // Use the fetched token (contained in the 'jwt' field of the JSON response) in the callback
-                callback(data.jwt);
-            })
-            .catch(error => {
-                console.error('There has been a problem with your fetch operation:', error);
-            });
-    });
 
-</script>
 
 <button id='call-us-button'>
   Call us now
