@@ -125,15 +125,19 @@
   <option value="lt">Lithuanian</option>
   <option value="lv">Latvian</option>
   <option value="et">Estonian</option>
-  <option value="uk">Ukranian</option>
+  <option value="uk">Українська</option>
   <option value="ru">Russian</option>
-  <option value="kk">Kazakh</option>
-  <option value="ka">Georgian</option>
+  <option value="kk">Қазақша</option>
+  <option value="ka">ქართული</option>
   <option value="az">Azerbaijani</option>
+  <option value="uz"> ўзбекча </option>
   <option value="ar">Arabic</option>
   <option value="hi">हिन्दी (Hindī)</option>
-  <option value="en_in"> English India</option>
-  <option value="en_ik"> English UK </option>
+  <option value="en-in"> English India</option>
+  <option value="en-uk"> English UK </option>
+  <option value="tr"> Türkçe </option>
+  <option value="ko"> 한국어 </option>
+  <option value="zh"> 中文 </option>
 
 </select>
 
@@ -182,7 +186,7 @@
    const callUsButton = document.querySelector('#call-us-button')
 
   callUsButton.onclick = () => {
-    zE('messenger:open', 'voice', 'acb13b6d5e6e04e3b30c80e98257a35b')
+    zE('messenger:open', 'voice', 'b840bca6f78b0f37004e0661d0ba4941')
 
 
   }
@@ -208,8 +212,8 @@
 
   const setSegment = document.querySelector('#set-segment')
   setSegment.onclick = () => {
-    zE('messenger:set', 'conversationTags', ["seg_1_32"]);
-    zE('messenger:set', 'conversationFields', [{ id: 18384449783442, value: "ka"}]);
+    zE('messenger:set', 'conversationTags', ["1_поле"]);
+    zE('messenger:set', 'conversationFields', [{ id: 14506041834898, value: "Kareem Ivanov"}]);
                             }
 </script>
 
