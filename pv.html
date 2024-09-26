@@ -115,13 +115,14 @@
 
 </head>
 <body>
-<h1>AA sandbox</h1>
+<h1>PV Prod test</h1>
 <p>Please select the site language </p>
 
 <label>Language</label>
 <select class="form-select" aria-label="Default select example">
   <option selected value="en-us">English US</option>
- an <option value="de">German</option>
+  <option value="es">Spanish</option>
+  <option value="de">German</option>
   <option value="lt">Lithuanian</option>
   <option value="lv">Latvian</option>
   <option value="et">Estonian</option>
@@ -142,7 +143,8 @@
 </select>
 
 <!-- Start of d3v-ontec Zendesk Widget script -->
-<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=c6be02c6-682b-4602-8faf-78c7f2f1c3c5"> </script>
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=c6be02c6-682b-4602-8faf-78c7f2f1c3c5gi
+"> </script>
 <!-- End of d3v-ontec Zendesk Widget script -->
 
 <button id='call-us-button'>
@@ -212,8 +214,8 @@
 
   const setSegment = document.querySelector('#set-segment')
   setSegment.onclick = () => {
-    zE('messenger:set', 'conversationTags', ["1_поле"]);
-    zE('messenger:set', 'conversationFields', [{ id: 14506041834898, value: "Kareem Ivanov"}]);
+    zE('messenger:set', 'conversationTags', ["site"]);
+    zE('messenger:set', 'conversationFields', [{ id: 33725343512723, value: "roof_mount"}]);
                             }
 </script>
 
