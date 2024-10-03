@@ -156,11 +156,11 @@
 
 <script>
 
-  window.zESettings = {
-    webWidget: {
-      offset: { horizontal: '100px', vertical: '150px' }
-    }
-  };
+  //window.zESettings = {
+  //  webWidget: {
+   //   offset: { horizontal: '100px', vertical: '150px' }
+  //  }
+  //};
 
   $('select').on('change', function(e) {
     console.log(this.value)
@@ -220,7 +220,7 @@
                             }
 
 zE("messenger:on", "open", function () {
-      zE('messenger:set', 'conversationFields', [{ id: 18028673146002, value: window.location.href}]);
+      zE('messenger:set', 'conversationFields', [{ id: 18028673146002, value: window.location.href }]);
      console.log( window.location.href );
 })
 
