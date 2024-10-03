@@ -218,6 +218,13 @@
     zE('messenger:set', 'conversationTags', ["seg_1_32"]);
     zE('messenger:set', 'conversationFields', [{ id: 18353085973266, value: "ka"}]);
                             }
+
+zE("messenger:on", "open", function () {
+      zE('messenger:set', 'conversationFields', [{ id: 18028673146002, value: window.location.href}]);
+
+})
+
+
 </script>
 
 </body>
