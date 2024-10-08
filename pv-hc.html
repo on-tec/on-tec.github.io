@@ -24,14 +24,9 @@
 
         const jwt = data.jwt;
 
-        // On success, add the JWT to the hidden form field
+        // On success, add the JWT to the hidden form field and submit the form
         document.getElementById('jwtInput').value = jwt;
-
-        // Submit the form
         document.forms['jwtForm'].submit();
-
-        // After form submission, redirect to the desired page
-        window.location.href = 'https://pvcase.zendesk.com/hc/';
       } catch (error) {
         console.error('Error:', error.message); // Log a more readable error
         console.error('Stack Trace:', error.stack); // Log the stack trace for more details
@@ -48,7 +43,7 @@
       </form>
 
       <!-- JWT submission form -->
-      <form id="jwtForm" method="post" action="https://andersonopt.zendesk.com/access/jwt">
+      <form id="jwtForm" method="post" action="https://andersonopt.zendesk.com/access/jwt?return_to=https://pvcase.zendesk.com/hc/">
         <input id="jwtInput" type="hidden" name="jwt" />
       </form>
     </div>
