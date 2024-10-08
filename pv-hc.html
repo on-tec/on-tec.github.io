@@ -1,0 +1,56 @@
+<html>
+  <script>
+    async function handleLogin(event) {
+      event.preventDefault(); // Prevent the form from submitting
+
+      try {
+        // Make a request to the endpoint to fetch the JWT
+        const response = await fetch('https://b7inyww6iooctmfx7xj3ufux440lalbf.lambda-url.eu-west-1.on.aws/', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
+
+        console.log('Response status:', response.status);  // Log the response status
+        console.log('Raw response:', response);  // Log the raw response
+
+        if (!response.ok) {
+          throw new Error('Failed to fetch JWT. Status code: ' + response.status);
+        }
+
+        const data = await response.json(); // Try parsing the response as JSON
+        console.log('Parsed response data:', data); // Log the parsed data
+
+        const jwt = data.jwt;
+
+        // On success, add the JWT to the hidden form field
+        document.getElementById('jwtInput').value = jwt;
+
+        // Submit the form
+        document.forms['jwtForm'].submit();
+
+        // After form submission, redirect to the desired page
+        window.location.href = 'https://pvcase.zendesk.com/hc/';
+      } catch (error) {
+        console.error('Error:', error.message); // Log a more readable error
+        console.error('Stack Trace:', error.stack); // Log the stack trace for more details
+      }
+    }
+  </script>
+
+  <body>
+    <div>
+      <!-- Your login form -->
+      <form id="yourLoginForm" onsubmit="handleLogin(event)">
+        <!-- Add your form fields here -->
+        <button type="submit">Login</button>
+      </form>
+
+      <!-- JWT submission form -->
+      <form id="jwtForm" method="post" action="https://andersonopt.zendesk.com/access/jwt">
+        <input id="jwtInput" type="hidden" name="jwt" />
+      </form>
+    </div>
+  </body>
+</html>
