@@ -1,8 +1,6 @@
 <html>
   <script>
-    async function handleLogin(event) {
-      event.preventDefault(); // Prevent the form from submitting
-
+    async function handleLogin() {
       try {
         // Make a request to the endpoint to fetch the JWT
         const response = await fetch('https://b7inyww6iooctmfx7xj3ufux440lalbf.lambda-url.eu-west-1.on.aws/', {
@@ -32,16 +30,15 @@
         console.error('Stack Trace:', error.stack); // Log the stack trace for more details
       }
     }
+
+    // Automatically call the handleLogin function once the page is fully loaded
+    window.onload = function() {
+      handleLogin();
+    }
   </script>
 
   <body>
     <div>
-      <!-- Your login form -->
-      <form id="yourLoginForm" onsubmit="handleLogin(event)">
-        <!-- Add your form fields here -->
-        <button type="submit">Login</button>
-      </form>
-
       <!-- JWT submission form -->
       <form id="jwtForm" method="post" action="https://andersonopt.zendesk.com/access/jwt?return_to=https://pvcase.zendesk.com/hc/">
         <input id="jwtInput" type="hidden" name="jwt" />
