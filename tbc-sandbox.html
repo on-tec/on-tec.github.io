@@ -68,6 +68,29 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    #open-widget {
+      background: #B4F8C8;
+      color: black;
+      width: 150px;
+      height: 42px;
+      border-radius: 24px;
+      border: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Helvetica, sans-serif;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 24px;
+      margin-left: 24px;
+    }
+
+    #open-widget:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
    #logout-button {
       background: #FFAEBC;
       color: black;
@@ -140,10 +163,16 @@
 </button>
 
 <button id='set-segment'>
-  Set Segment
+  Set meta
 </button>
+
+<button id='open-widget'>
+  Open widget
+</button>
+
+
   
-  <button id='logout-button'>
+<button id='logout-button'>
   Logout
 </button>
 
@@ -174,6 +203,14 @@
   callUsButton.onclick = () => {
     zE('messenger:open', 'voice', 'd55e38235bfd7351ed0cc026b603f252')
 
+
+  }
+
+
+  const openWidget = document.querySelector('#open-widget')
+
+  openWidget.onclick = () => {
+    zE('messenger', 'open')
 
   }
 
