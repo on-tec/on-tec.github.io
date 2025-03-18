@@ -163,7 +163,7 @@
 </button>
 
 <button id='set-segment'>
-  Set meta
+  Set concept segment
 </button>
 
 <button id='open-widget'>
@@ -252,8 +252,7 @@
 
   const setSegment = document.querySelector('#set-segment')
   setSegment.onclick = () => {
-    zE('messenger:set', 'conversationTags', ["seg_1_32"]);
-    zE('messenger:set', 'conversationFields', [{ id: 18353085973266, value: "ka"}]);
+    zE('messenger:set', 'conversationFields', [{ id: 18353085973266, value: "ka"},{ id: 25335326151698, value: "10"} ]);
                             }
 
 zE("messenger:on", "open", function () {
