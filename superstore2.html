@@ -1,6 +1,7 @@
 
 <html>
 <head>
+  <title>Test Chat Page</title>
 
   <!-- Latest compiled and minified CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-4bw+/aepP/YC94hEpVNVgiZdgIC5+VKNBQNGCHeKRQN+PtmoHDEXuppvnDJzQIu9" crossorigin="anonymous">
@@ -67,6 +68,29 @@
       text-decoration: underline;
       cursor: pointer;
     }
+
+    #open-widget {
+      background: #B4F8C8;
+      color: black;
+      width: 150px;
+      height: 42px;
+      border-radius: 24px;
+      border: 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-family: Helvetica, sans-serif;
+      padding: 10px 20px;
+      cursor: pointer;
+      margin-top: 24px;
+      margin-left: 24px;
+    }
+
+    #open-widget:hover {
+      text-decoration: underline;
+      cursor: pointer;
+    }
+
    #logout-button {
       background: #FFAEBC;
       color: black;
@@ -115,28 +139,36 @@
 
 </head>
 <body>
-<h1>Superstore</h1>
+<h1>SplitWise System #2</h1>
 <p>Please select the site language </p>
 
 <label>Language</label>
 <select class="form-select" aria-label="Default select example">
-  <option selected value="en-US">English</option>
+  <option selected value="en-us">English US</option>
+  <option value="es">Spanish</option>
   <option value="de">German</option>
   <option value="lt">Lithuanian</option>
   <option value="lv">Latvian</option>
   <option value="et">Estonian</option>
-  <option value="uk">Ukranian</option>
+  <option value="uk">Українська</option>
   <option value="ru">Russian</option>
-  <option value="kk">Kazakh</option>
-  <option value="ka">Georgian</option>
+  <option value="kk">Қазақша</option>
+  <option value="ka">ქართული</option>
   <option value="az">Azerbaijani</option>
+  <option value="uz"> ўзбекча </option>
   <option value="ar">Arabic</option>
+  <option value="hi">हिन्दी (Hindī)</option>
+  <option value="en-in"> English India</option>
+  <option value="en-uk"> English UK </option>
+  <option value="tr"> Türkçe </option>
+  <option value="ko"> 한국어 </option>
+  <option value="zh"> 中文 </option>
 
 </select>
 
-<!-- Start of d3v-ontec Zendesk Widget script -->
 <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=56f03674-1b66-4039-9e35-effa56862347"> </script>
-<!-- End of d3v-ontec Zendesk Widget script -->
+
+
 
 <button id='call-us-button'>
   Call us now
@@ -147,10 +179,16 @@
 </button>
 
 <button id='set-segment'>
-  Set Segment
+  Set meta
 </button>
+
+<button id='open-widget'>
+  Open widget
+</button>
+
+
   
-  <button id='logout-button'>
+<button id='logout-button'>
   Logout
 </button>
 
@@ -179,8 +217,16 @@
    const callUsButton = document.querySelector('#call-us-button')
 
   callUsButton.onclick = () => {
-    zE('messenger:open', 'voice', 'acb13b6d5e6e04e3b30c80e98257a35b')
+    zE('messenger:open', 'voice', 'd55e38235bfd7351ed0cc026b603f252')
 
+
+  }
+
+
+  const openWidget = document.querySelector('#open-widget')
+
+  openWidget.onclick = () => {
+    zE('messenger', 'open')
 
   }
 
@@ -188,8 +234,25 @@
    
  loginButton.onclick = () => {
     zE('messenger', 'loginUser', function (callback) {
-  callback('eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCIsImtpZCI6ImFwcF82MWYyNmQzNzFjZTU0OTAwZWVlODgxNDEifQ.eyJleHRlcm5hbF9pZCI6Ijk3MTU4NTY0MTg1OCIsIm5hbWUiOiJKb2huIiwiZW1haWwiOiJtaW50c2V2QGdtYWlsLmNvbSIsInNjb3BlIjoidXNlciJ9.y9SbEJQFPevLpfn0hMbp2Lz5uxBlSHx5J5XXJH5caRY');
-});
+        // URL from where to fetch the JWT token
+        const tokenUrl = 'https://e6ywjxpmet4oqmckibjkipdmdi0grmxl.lambda-url.eu-west-1.on.aws/';
+        
+        // Fetch the JWT token from the endpoint
+        fetch(tokenUrl)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                return response.json(); // Parse the response body as JSON
+            })
+            .then(data => {
+                // Use the fetched token (contained in the 'jwt' field of the JSON response) in the callback
+                callback(data.jwt);
+            })
+            .catch(error => {
+                console.error('There has been a problem with your fetch operation:', error);
+            });
+    });
 };
 
 
@@ -205,9 +268,9 @@
 
   const setSegment = document.querySelector('#set-segment')
   setSegment.onclick = () => {
-    zE('messenger:set', 'conversationTags', ["seg_1_32"]);
-    zE('messenger:set', 'conversationFields', [{ id: 18384449783442, value: "ka"}]);
+    zE('messenger:set', 'conversationTags', ["Gold"]);
                             }
+
 </script>
 
 </body>
