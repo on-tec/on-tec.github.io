@@ -1,0 +1,171 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zendesk widget test</title>
+
+  <!-- Zendesk Garden CSS -->
+  <link href="https://unpkg.com/@zendeskgarden/css-bedrock@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-forms@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-buttons@8.3.0/dist/index.css" rel="stylesheet">
+
+  <style>
+    body {
+      background-color: #f8f9fb;
+      font-family: 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: 40px;
+      color: #1f2933;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: #17394d;
+    }
+
+    p {
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+    }
+
+    label {
+      font-weight: 600;
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    select.zh-input,
+    input.zh-input {
+      width: 100%;
+      padding: 12px;
+      font-size: 1rem;
+      margin-bottom: 24px;
+      border-radius: 6px;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .zh-btn {
+      font-size: 1rem;
+      padding: 14px 24px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .zh-btn:hover {
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Zendesk widget test</h1>
+    <p>Please select the site language</p>
+
+    <div class="form-group">
+      <label for="language-select">Language</label>
+      <select id="language-select" class="zh-input">
+        <option value="en-US">English</option>
+        <option selected value="ka">Georgian</option>
+      </select>
+    </div>
+
+    <div class="form-group">
+      <label for="segment-input">Segment Code</label>
+      <input type="text" id="segment-input" class="zh-input" placeholder="Enter segment code">
+    </div>
+
+    <div class="button-group">
+      <button id="call-us-button" class="zh-btn zh-btn--primary">Call us now</button>
+      <button id="login-button" class="zh-btn zh-btn--primary">Login</button>
+      <button id="set-segment" class="zh-btn zh-btn--secondary">Set Segment</button>
+      <button id="open-widget" class="zh-btn zh-btn--secondary">Open Widget</button>
+      <button id="logout-button" class="zh-btn zh-btn--danger">Logout</button>
+    </div>
+  </div>
+
+  <!-- Zendesk Web Widget -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=a954b0c9-4bb9-44fe-b9fc-e69151042ff4"></script>
+
+  <!-- Logic -->
+  <script>
+    window.zESettings = {
+      webWidget: {
+        offset: { horizontal: '100px', vertical: '150px' }
+      }
+    };
+
+    document.querySelector('#language-select').addEventListener('change', function () {
+      zE('messenger:set', 'locale', this.value);
+    });
+
+    document.querySelector('#call-us-button').onclick = () => {
+      zE('messenger:open', 'voice', 'd55e38235bfd7351ed0cc026b603f252');
+    };
+
+    document.querySelector('#open-widget').onclick = () => {
+      zE('messenger', 'open');
+    };
+
+    document.querySelector('#login-button').onclick = () => {
+      zE('messenger', 'loginUser', function (callback) {
+        const tokenUrl = 'https://wdcf722l3j.execute-api.eu-west-1.amazonaws.com/Prod';
+
+        fetch(tokenUrl)
+          .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+          })
+          .then(data => callback(data.jwt))
+          .catch(error => console.error('JWT fetch error:', error));
+      });
+    };
+
+    document.querySelector('#logout-button').onclick = () => {
+      zE("messenger", "logoutUser");
+    };
+
+    document.querySelector('#set-segment').onclick = () => {
+      const segmentCode = document.querySelector('#segment-input').value;
+
+      if (!segmentCode) {
+        alert("Please enter a segment code.");
+        return;
+      }
+
+      zE('messenger:set', 'conversationFields', [
+        { id: 18384449783442, value: "ka" },
+        { id: 17495900552722, value: segmentCode }
+      ]);
+
+      zE("messenger:set", "conversationTags", ["segment_code"]);
+    };
+
+    zE("messenger:on", "open", function () {
+      zE('messenger:set', 'conversationFields', [
+        { id: 18028673146002, value: window.location.href }
+      ]);
+      console.log(window.location.href);
+    });
+  </script>
+</body>
+</html>
