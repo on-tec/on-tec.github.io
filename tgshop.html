@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Simple Auto Parts Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    }
+
+    body {
+      background: #f3f4f6;
+      color: #111827;
+      padding: 16px;
+    }
+
+    .shop {
+      max-width: 960px;
+      margin: 0 auto;
+      background: #ffffff;
+      border-radius: 12px;
+      padding: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.06);
+    }
+
+    header {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: baseline;
+      justify-content: space-between;
+      gap: 8px;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #e5e7eb;
+      padding-bottom: 12px;
+    }
+
+    header h1 {
+      font-size: 1.5rem;
+      font-weight: 700;
+    }
+
+    header span {
+      font-size: 0.9rem;
+      color: #6b7280;
+    }
+
+    .layout {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .layout {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 12px;
+    }
+
+    .product-card {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 10px 12px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      gap: 8px;
+      background: #f9fafb;
+    }
+
+    .product-header {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .product-sku {
+      font-size: 0.75rem;
+      color: #6b7280;
+      text-align: right;
+    }
+
+    .product-desc {
+      font-size: 0.83rem;
+      color: #4b5563;
+      min-height: 36px;
+    }
+
+    .product-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 4px;
+    }
+
+    .product-price {
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .product-price span {
+      font-size: 0.8rem;
+      font-weight: 400;
+      color: #6b7280;
+    }
+
+    button {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      background: #111827;
+      color: #f9fafb;
+      transition: transform 0.06s ease, box-shadow 0.06s ease, opacity 0.15s ease;
+      box-shadow: 0 4px 10px rgba(15, 23, 42, 0.15);
+      white-space: nowrap;
+    }
+
+    button:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 7px 16px rgba(15, 23, 42, 0.22);
+    }
+
+    button:active {
+      transform: translateY(0px) scale(0.98);
+      box-shadow: 0 3px 8px rgba(15, 23, 42, 0.18);
+    }
+
+    button:disabled {
+      opacity: 0.5;
+      cursor: default;
+      box-shadow: none;
+      transform: none;
+    }
+
+    .cart {
+      border: 1px solid #e5e7eb;
+      border-radius: 10px;
+      padding: 12px;
+      background: #f9fafb;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      max-height: 420px;
+    }
+
+    .cart-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+      margin-bottom: 4px;
+    }
+
+    .cart-header h2 {
+      font-size: 1rem;
+      font-weight: 600;
+    }
+
+    .cart-header span {
+      font-size: 0.8rem;
+      color: #6b7280;
+    }
+
+    .cart-items {
+      flex: 1;
+      overflow-y: auto;
+      padding-right: 4px;
+      border-top: 1px dashed #e5e7eb;
+      border-bottom: 1px dashed #e5e7eb;
+      margin: 4px 0;
+    }
+
+    .cart-empty {
+      font-size: 0.85rem;
+      color: #9ca3af;
+      padding: 8px 0;
+    }
+
+    .cart-row {
+      display: grid;
+      grid-template-columns: 1fr auto auto;
+      gap: 6px;
+      align-items: center;
+      font-size: 0.85rem;
+      padding: 6px 0;
+    }
+
+    .cart-row + .cart-row {
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .cart-qty {
+      display: inline-flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      color: #4b5563;
+    }
+
+    .cart-qty button {
+      padding: 2px 7px;
+      font-size: 0.7rem;
+      box-shadow: none;
+    }
+
+    .cart-price {
+      font-size: 0.85rem;
+      font-weight: 500;
+      text-align: right;
+      min-width: 58px;
+    }
+
+    .cart-footer {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .cart-total {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.95rem;
+      font-weight: 600;
+    }
+
+    .cart-total span:last-child {
+      font-size: 1rem;
+    }
+
+    .note {
+      font-size: 0.78rem;
+      color: #6b7280;
+      line-height: 1.4;
+    }
+
+    .checkout-btn {
+      width: 100%;
+      justify-content: center;
+      display: inline-flex;
+      text-align: center;
+    }
+  </style>
+ <!-- Start of tegetamotors Zendesk Widget script -->
+<script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=272191ba-60b3-4957-820e-0c0946561ec3"> </script>
+<!-- End of tegetamotors Zendesk Widget script -->
+</head>
+<body>
+  <div class="shop">
+    <header>
+      <h1>Auto Parts Demo Shop</h1>
+      <span>Super simple, front-end only — no real checkout.</span>
+    </header>
+
+    <div class="layout">
+      <!-- Products -->
+      <main>
+        <div class="products">
+          <article class="product-card" data-id="oil-filter" data-name="Oil Filter" data-price="19.90">
+            <div>
+              <div class="product-header">
+                <div class="product-name">Oil Filter</div>
+                <div class="product-sku">SKU: OF-001</div>
+              </div>
+              <p class="product-desc">
+                Standard oil filter for most compact cars and sedans.
+              </p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">$19.90 <span>incl. VAT</span></div>
+              <button class="add-btn">Add</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="brake-pads" data-name="Front Brake Pads" data-price="49.50">
+            <div>
+              <div class="product-header">
+                <div class="product-name">Front Brake Pads</div>
+                <div class="product-sku">SKU: BP-210</div>
+              </div>
+              <p class="product-desc">
+                Semi-metallic pads, low dust, fits many mid-size vehicles.
+              </p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">$49.50 <span>per axle</span></div>
+              <button class="add-btn">Add</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="wiper-blades" data-name="Wiper Blades (Pair)" data-price="15.00">
+            <div>
+              <div class="product-header">
+                <div class="product-name">Wiper Blades (Pair)</div>
+                <div class="product-sku">SKU: WB-050</div>
+              </div>
+              <p class="product-desc">
+                Universal 22&quot; / 18&quot; blades for front windshield.
+              </p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">$15.00 <span>per set</span></div>
+              <button class="add-btn">Add</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="spark-plug" data-name="Spark Plug" data-price="7.25">
+            <div>
+              <div class="product-header">
+                <div class="product-name">Spark Plug</div>
+                <div class="product-sku">SKU: SP-004</div>
+              </div>
+              <p class="product-desc">
+                Copper core spark plug. Recommended to buy 4 or more.
+              </p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">$7.25 <span>each</span></div>
+              <button class="add-btn">Add</button>
+            </div>
+          </article>
+
+          <article class="product-card" data-id="engine-oil" data-name="Engine Oil 5W-30 (4L)" data-price="32.00">
+            <div>
+              <div class="product-header">
+                <div class="product-name">Engine Oil 5W-30 (4L)</div>
+                <div class="product-sku">SKU: EO-530</div>
+              </div>
+              <p class="product-desc">
+                Fully synthetic engine oil 5W-30, 4-liter canister.
+              </p>
+            </div>
+            <div class="product-footer">
+              <div class="product-price">$32.00 <span>4L</span></div>
+              <button class="add-btn">Add</button>
+            </div>
+          </article>
+        </div>
+      </main>
+
+      <!-- Cart -->
+      <aside class="cart">
+        <div class="cart-header">
+          <h2>Your Cart</h2>
+          <span id="cart-count">0 items</span>
+        </div>
+
+        <div class="cart-items" id="cart-items">
+          <div class="cart-empty">Cart is empty. Add a part to get started.</div>
+        </div>
+
+        <div class="cart-footer">
+          <div class="cart-total">
+            <span>Total</span>
+            <span id="cart-total">$0.00</span>
+          </div>
+          <button class="checkout-btn" id="checkout-btn" disabled>Fake Checkout</button>
+          <p class="note">
+            This is a front-end demo only. No payments or orders are actually processed.
+          </p>
+        </div>
+      </aside>
+    </div>
+  </div>
+
+  <script>
+    // Super simple in-memory cart
+    const cart = {}; // { id: { name, price, qty } }
+
+    const cartItemsEl = document.getElementById("cart-items");
+    const cartTotalEl = document.getElementById("cart-total");
+    const cartCountEl = document.getElementById("cart-count");
+    const checkoutBtn = document.getElementById("checkout-btn");
+
+    // Format price as $X.XX
+    function formatPrice(num) {
+      const value = Number(num) || 0;
+      return "$" + value.toFixed(2);
+    }
+
+    function updateCartSummary() {
+      const ids = Object.keys(cart);
+      const totalItems = ids.reduce((sum, id) => sum + cart[id].qty, 0);
+      const totalPrice = ids.reduce((sum, id) => sum + cart[id].qty * cart[id].price, 0);
+
+      cartCountEl.textContent = totalItems + (totalItems === 1 ? " item" : " items");
+      cartTotalEl.textContent = formatPrice(totalPrice);
+      checkoutBtn.disabled = totalItems === 0;
+
+      // Update list
+      cartItemsEl.innerHTML = "";
+      if (ids.length === 0) {
+        const empty = document.createElement("div");
+        empty.className = "cart-empty";
+        empty.textContent = "Cart is empty. Add a part to get started.";
+        cartItemsEl.appendChild(empty);
+        return;
+      }
+
+      ids.forEach((id) => {
+        const item = cart[id];
+
+        const row = document.createElement("div");
+        row.className = "cart-row";
+
+        const name = document.createElement("div");
+        name.textContent = item.name;
+
+        const qty = document.createElement("div");
+        qty.className = "cart-qty";
+
+        const minusBtn = document.createElement("button");
+        minusBtn.textContent = "−";
+        minusBtn.addEventListener("click", () => changeQty(id, -1));
+
+        const qtyLabel = document.createElement("span");
+        qtyLabel.textContent = "x " + item.qty;
+
+        const plusBtn = document.createElement("button");
+        plusBtn.textContent = "+";
+        plusBtn.addEventListener("click", () => changeQty(id, +1));
+
+        qty.appendChild(minusBtn);
+        qty.appendChild(qtyLabel);
+        qty.appendChild(plusBtn);
+
+        const price = document.createElement("div");
+        price.className = "cart-price";
+        price.textContent = formatPrice(item.qty * item.price);
+
+        row.appendChild(name);
+        row.appendChild(qty);
+        row.appendChild(price);
+
+        cartItemsEl.appendChild(row);
+      });
+    }
+
+    function addToCart(id, name, price) {
+      const numericPrice = Number(price);
+      if (!id || !name || !Number.isFinite(numericPrice)) {
+        return; // ignore invalid data
+      }
+
+      if (!cart[id]) {
+        cart[id] = { name, price: numericPrice, qty: 0 };
+      }
+      cart[id].qty += 1;
+      updateCartSummary();
+    }
+
+    function changeQty(id, delta) {
+      if (!cart[id]) return;
+      cart[id].qty += delta;
+      if (cart[id].qty <= 0) {
+        delete cart[id];
+      }
+      updateCartSummary();
+    }
+
+    // Attach handlers to product "Add" buttons
+    document.querySelectorAll(".product-card").forEach((card) => {
+      const btn = card.querySelector(".add-btn");
+      btn.addEventListener("click", () => {
+        const id = card.getAttribute("data-id");
+        const name = card.getAttribute("data-name");
+        const price = card.getAttribute("data-price");
+        addToCart(id, name, price);
+      });
+    });
+
+    // Fake checkout
+    checkoutBtn.addEventListener("click", () => {
+      const ids = Object.keys(cart);
+      if (ids.length === 0) return;
+
+      const summary = ids
+        .map((id) => {
+          const item = cart[id];
+          return `${item.qty} × ${item.name}`;
+        })
+        .join(", ");
+
+      alert(
+        "Demo only, no real order is placed.\n\nYour cart:\n" +
+          summary +
+          "\n\nTotal: " +
+          cartTotalEl.textContent
+      );
+    });
+
+    // Initial render
+    updateCartSummary();
+  </script>
+</body>
+</html>
