@@ -92,7 +92,7 @@
     </div>
 
     <div class="form-group">
-      <label for="segment-input">Segment Code</label>
+      <label for="segment-input">Set Segment</label>
       <input type="text" id="segment-input" class="zh-input" placeholder="Enter segment code">
     </div>
 
@@ -101,7 +101,7 @@
       <button id="login-button" class="zh-btn zh-btn--primary">Login</button>
       <button id="set-segment" class="zh-btn zh-btn--secondary">Set Segment</button>
       <button id="open-widget" class="zh-btn zh-btn--secondary">Open Widget</button>
-      <button id="logout-button" class="zh-btn zh-btn--danger">Logout</button>
+      <button id="logout-button" class="zh-btn zh-btn--danger">Logout/Reset</button>
     </div>
   </div>
 
@@ -153,18 +153,14 @@
         alert("Please enter a segment code.");
         return;
       }
-
+      
       zE('messenger:set', 'conversationFields', [
-        { id: 18353085973266, value: "hy" },
-        { id: 18028653503634, value: segmentCode }
+        { id: 31524487418514, value: segmentCode }
       ]);
-
-      zE("messenger:set", "conversationTags", [value: segmentCode]);
-    };
-
+    }
     zE("messenger:on", "open", function () {
       zE('messenger:set', 'conversationFields', [
-        { id: 18028673146002, value: window.location.href }
+        { id: 31524625564178, value: window.location.href }
       ]);
       console.log(window.location.href);
     });
