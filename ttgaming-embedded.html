@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zendesk Embedded Web Widget Demo</title>
+
+  <!-- Zendesk Garden CSS -->
+  <link href="https://unpkg.com/@zendeskgarden/css-bedrock@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-forms@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-buttons@8.3.0/dist/index.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #4b5563;
+      --surface: #ffffff;
+      --accent: #0ea5e9;
+      --border: #e5e7eb;
+      --panel: #f8fafc;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: radial-gradient(circle at 20% 20%, #e0f2fe 0, transparent 25%), radial-gradient(circle at 80% 0, #f5d0fe 0, transparent 22%), #f1f5f9;
+      color: var(--ink);
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      padding: 32px 36px 40px;
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    p.lead {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .controls {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      margin-bottom: 20px;
+    }
+
+    .controls label {
+      margin: 0;
+      color: var(--ink);
+      font-weight: 600;
+    }
+
+    .radio-row {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .status {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0e7490;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .status.is-warn {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status.is-ready {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+      gap: 18px;
+      margin-top: 4px;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.97rem;
+    }
+
+    .embed-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      min-height: 500px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .split {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 12px;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+      font-size: 0.92rem;
+      width: fit-content;
+    }
+
+    code.snippet {
+      background: #0f172a;
+      color: #e0f2fe;
+      padding: 10px 12px;
+      border-radius: 10px;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+
+    .footnote {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 960px) {
+      .split {
+        grid-template-columns: 1fr;
+      }
+
+      .embed-box {
+        min-height: 360px;
+      }
+    }
+  </style>
+
+  <!-- Disable auto-render so we control embedded containers -->
+  <script>
+    window.zEMessenger = {
+      autorender: false
+    };
+  </script>
+
+  <!-- Zendesk Web Widget (messenger) -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=7545970a-7d79-4c90-b796-f26e71e2208a"></script>
+</head>
+<body>
+  <div class="shell">
+    <h1>Embedded Zendesk Web Widget</h1>
+    <p class="lead">Demo of the new embedded mode: render the widget into your own layout instead of the floating launcher.</p>
+
+    <div class="controls">
+      <div class="badge">Container IDs pinned</div>
+      <div class="radio-row">
+        <label><input type="radio" name="layout" value="full" checked> Full widget</label>
+        <label><input type="radio" name="layout" value="split"> Split: list + messages</label>
+      </div>
+      <div class="status is-warn" data-status>Loading messenger…</div>
+    </div>
+
+    <div class="grid">
+      <div class="panel" data-layout-panel="full">
+        <h2>Full widget</h2>
+        <p class="hint">Renders the complete messenger inside <code class="snippet">#full-widget</code>. Great for a help or support hub.</p>
+        <div id="full-widget" class="embed-box">#full-widget</div>
+      </div>
+
+      <div class="panel" data-layout-panel="split">
+        <h2>Split view</h2>
+        <p class="hint">Renders the conversation list and message log separately. Containers: <code class="snippet">#conversation-list</code> and <code class="snippet">#message-log</code>.</p>
+        <div class="split">
+          <div id="conversation-list" class="embed-box">#conversation-list</div>
+          <div id="message-log" class="embed-box">#message-log</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footnote">
+      • Switching modes re-calls <code>zE('messenger', 'render', config)</code> with <code>mode: 'embedded'</code>.<br>
+      • Embedded and floating modes should not be mixed on the same page—autorender is disabled to keep everything embedded.
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const statusEl = document.querySelector('[data-status]');
+      const layoutPanels = document.querySelectorAll('[data-layout-panel]');
+      const layoutInputs = document.querySelectorAll('input[name="layout"]');
+      let messengerReady = false;
+
+      const configs = {
+        full: {
+          mode: 'embedded',
+          widget: { targetElement: '#full-widget' }
+        },
+        split: {
+          mode: 'embedded',
+          conversationList: { targetElement: '#conversation-list' },
+          messageLog: { targetElement: '#message-log' }
+        }
+      };
+
+      const setStatus = (text, variant) => {
+        statusEl.textContent = text;
+        statusEl.classList.remove('is-warn', 'is-ready');
+        if (variant) statusEl.classList.add(variant);
+      };
+
+      const setActivePanel = (layout) => {
+        layoutPanels.forEach((panel) => {
+          panel.style.opacity = panel.dataset.layoutPanel === layout ? '1' : '0.45';
+        });
+      };
+
+      const renderLayout = (layout) => {
+        const config = configs[layout];
+        if (!config) return;
+        setActivePanel(layout);
+        setStatus('Rendering ' + layout + ' layout…', 'is-ready');
+        zE('messenger', 'render', config);
+      };
+
+      layoutInputs.forEach((input) => {
+        input.addEventListener('change', function (event) {
+          if (!messengerReady) {
+            setStatus('Messenger is still loading…', 'is-warn');
+            return;
+          }
+          renderLayout(event.target.value);
+        });
+      });
+
+      // Wait for messenger to be fully loaded before rendering into containers
+      zE('messenger:on', 'ready', function () {
+        messengerReady = true;
+        setStatus('Ready. Full widget rendered in #full-widget.', 'is-ready');
+        renderLayout('full');
+      });
+    });
+  </script>
+</body>
+</html>
