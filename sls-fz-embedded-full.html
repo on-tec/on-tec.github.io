@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zendesk Embedded Web Widget Demo</title>
+
+  <!-- Zendesk Garden CSS -->
+  <link href="https://unpkg.com/@zendeskgarden/css-bedrock@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-forms@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-buttons@8.3.0/dist/index.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #4b5563;
+      --surface: #ffffff;
+      --accent: #0ea5e9;
+      --border: #e5e7eb;
+      --panel: #f8fafc;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: radial-gradient(circle at 20% 20%, #e0f2fe 0, transparent 25%), radial-gradient(circle at 80% 0, #f5d0fe 0, transparent 22%), #f1f5f9;
+      color: var(--ink);
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      padding: 32px 36px 40px;
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    p.lead {
+      margin: 0 0 20px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 18px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      background: var(--panel);
+      margin-bottom: 20px;
+    }
+
+    .status {
+      margin-left: auto;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 8px 12px;
+      border-radius: 999px;
+      background: #ecfeff;
+      color: #0e7490;
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .status.is-warn {
+      background: #fef3c7;
+      color: #b45309;
+    }
+
+    .status.is-ready {
+      background: #dcfce7;
+      color: #166534;
+    }
+
+    .panel {
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 18px;
+      background: var(--surface);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      box-shadow: 0 6px 14px rgba(15, 23, 42, 0.06);
+      margin-top: 4px;
+    }
+
+    .panel h2 {
+      margin: 0;
+      font-size: 1.25rem;
+    }
+
+    .hint {
+      color: var(--muted);
+      margin: 0;
+      font-size: 0.97rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .controls label {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .controls select {
+      min-width: 180px;
+    }
+
+    .embed-box {
+      border: 2px dashed #cbd5e1;
+      border-radius: 12px;
+      background: #f8fafc;
+      min-height: 720px;
+      height: 720px;
+      width: 100%;
+      color: #94a3b8;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+      position: relative;
+      overflow: hidden;
+      padding: 0;
+      display: block;
+    }
+
+    /* Ensure the injected iframe fills the container */
+    #full-widget iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+      display: block;
+    }
+
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      padding: 6px 10px;
+      border-radius: 10px;
+      background: #eff6ff;
+      color: #1d4ed8;
+      font-weight: 600;
+      font-size: 0.92rem;
+      width: fit-content;
+    }
+
+    code.snippet {
+      background: #0f172a;
+      color: #e0f2fe;
+      padding: 10px 12px;
+      border-radius: 10px;
+      display: inline-block;
+      font-size: 0.9rem;
+    }
+
+    .footnote {
+      margin-top: 20px;
+      color: var(--muted);
+      font-size: 0.95rem;
+      line-height: 1.5;
+    }
+
+    @media (max-width: 960px) {
+      .embed-box {
+        min-height: 360px;
+      }
+    }
+  </style>
+
+  <!-- Disable auto-render so we control embedded containers -->
+  <script>
+    window.zEMessenger = {
+      autorender: false
+    };
+  </script>
+
+  <!-- Zendesk Web Widget (messenger) -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=7545970a-7d79-4c90-b796-f26e71e2208a"></script>
+</head>
+<body>
+  <div class="shell">
+    <h1>Embedded Zendesk Web Widget</h1>
+    <p class="lead">Demo of the new embedded mode: render the widget into your own layout instead of the floating launcher.</p>
+
+    <div class="controls">
+      <label for="locale-select">Widget language</label>
+      <select id="locale-select" class="form-select" aria-label="Widget language">
+        <option selected value="en-us">English US</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+        <option value="lt">Lithuanian</option>
+        <option value="lv">Latvian</option>
+        <option value="et">Estonian</option>
+        <option value="uk">Українська</option>
+        <option value="ru">Russian</option>
+        <option value="kk">Қазақша</option>
+        <option value="ka">ქართული</option>
+        <option value="hy">Armenian</option>
+        <option value="az">Azerbaijani</option>
+        <option value="uz"> ўзбекча </option>
+        <option value="ar">Arabic</option>
+        <option value="hi">हिन्दी (Hindī)</option>
+        <option value="en-in"> English India</option>
+        <option value="en-uk"> English UK </option>
+        <option value="tr"> Türkçe </option>
+        <option value="ko"> 한국어 </option>
+        <option value="zh"> 中文 </option>
+      </select>
+    </div>
+
+    <div class="panel">
+      <h2>Full widget</h2>
+      <div id="full-widget" class="embed-box"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      let hasRendered = false;
+
+      // Apply a dark theme to the messenger
+      zE('messenger:set', 'customization', {
+        theme: {
+          primary: '#111827',
+          onPrimary: '#e5e7eb',
+          message: '#1e293b',
+          onMessage: '#e2e8f0',
+          action: '#22c55e',
+          onAction: '#082f1d',
+          businessMessage: '#0b1220',
+          onBusinessMessage: '#e2e8f0',
+          background: '#0b1220',
+          onBackground: '#cbd5e1',
+          error: '#f87171',
+          onError: '#111827',
+          notify: '#7c3aed',
+          onNotify: '#f8fafc',
+          onSecondaryAction: '#cbd5e1'
+        }
+      });
+
+      const renderFull = () => {
+        zE('messenger', 'render', {
+          mode: 'embedded',
+          widget: { targetElement: '#full-widget' }
+        });
+        hasRendered = true;
+      };
+
+      // Render immediately; zE queues commands until the widget is ready internally
+      renderFull();
+
+      const localeSelect = document.getElementById('locale-select');
+      if (localeSelect) {
+        localeSelect.addEventListener('change', function (event) {
+          const locale = event.target.value;
+          zE('messenger:set', 'locale', locale);
+        });
+      }
+    });
+  </script>
+</body>
+</html>

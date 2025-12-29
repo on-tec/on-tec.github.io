@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zendesk Embedded Split View</title>
+
+  <!-- Zendesk Garden CSS -->
+  <link href="https://unpkg.com/@zendeskgarden/css-bedrock@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-forms@8.3.0/dist/index.css" rel="stylesheet">
+  <link href="https://unpkg.com/@zendeskgarden/css-buttons@8.3.0/dist/index.css" rel="stylesheet">
+
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #4b5563;
+      --surface: #ffffff;
+      --border: #e5e7eb;
+      --panel: #f8fafc;
+    }
+
+    body {
+      margin: 0;
+      padding: 40px;
+      font-family: 'Helvetica Neue', Arial, sans-serif;
+      background: radial-gradient(circle at 20% 20%, #e0f2fe 0, transparent 25%), radial-gradient(circle at 80% 0, #f5d0fe 0, transparent 22%), #f1f5f9;
+      color: var(--ink);
+    }
+
+    .shell {
+      max-width: 1180px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.12);
+      padding: 32px 36px 40px;
+      border: 1px solid var(--border);
+    }
+
+    h1 {
+      margin: 0 0 8px;
+      font-size: 2.1rem;
+      letter-spacing: -0.02em;
+    }
+
+    p.lead {
+      margin: 0 0 22px;
+      color: var(--muted);
+      font-size: 1.05rem;
+    }
+
+    .controls {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .controls label {
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .controls select {
+      min-width: 180px;
+    }
+
+    .controls select {
+      min-width: 180px;
+    }
+
+    .split-shell {
+      display: grid;
+      grid-template-columns: 320px 1fr;
+      gap: 0;
+      align-items: stretch;
+      background: #0b1220;
+      border: 1px solid #1f2937;
+      border-radius: 0;
+      overflow: hidden;
+    }
+
+    .pane {
+      background: #0b1220;
+      min-height: 720px;
+      height: 720px;
+      overflow: hidden;
+      position: relative;
+      border-radius: 0;
+      border: 0;
+    }
+
+    #conversation-list {
+      border-right: 1px solid #1f2937;
+    }
+
+    /* Fill the injected iframes */
+    #conversation-list iframe,
+    #message-log iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+      display: block;
+    }
+
+    @media (max-width: 1024px) {
+      .split-shell {
+        grid-template-columns: 1fr;
+      }
+      .pane {
+        min-height: 560px;
+        height: 560px;
+      }
+      #conversation-list {
+        border-right: 0;
+        border-bottom: 1px solid #1f2937;
+      }
+    }
+  </style>
+
+  <!-- Disable auto-render so we control embedded containers -->
+  <script>
+    window.zEMessenger = { autorender: false };
+  </script>
+
+  <!-- Zendesk Web Widget (messenger) -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=7545970a-7d79-4c90-b796-f26e71e2208a"></script>
+</head>
+<body>
+  <div class="shell">
+    <h1>Embedded Split View</h1>
+    <p class="lead">Conversation list on the left, message log on the right. Both are rendered in embedded mode.</p>
+
+    <div class="controls">
+      <label for="locale-select">Widget language</label>
+      <select id="locale-select" class="form-select" aria-label="Widget language">
+        <option selected value="en-us">English US</option>
+        <option value="es">Spanish</option>
+        <option value="de">German</option>
+        <option value="lt">Lithuanian</option>
+        <option value="lv">Latvian</option>
+        <option value="et">Estonian</option>
+        <option value="uk">Українська</option>
+        <option value="ru">Russian</option>
+        <option value="kk">Қазақша</option>
+        <option value="ka">ქართული</option>
+        <option value="hy">Armenian</option>
+        <option value="az">Azerbaijani</option>
+        <option value="uz"> ўзбекча </option>
+        <option value="ar">Arabic</option>
+        <option value="hi">हिन्दी (Hindī)</option>
+        <option value="en-in"> English India</option>
+        <option value="en-uk"> English UK </option>
+        <option value="tr"> Türkçe </option>
+        <option value="ko"> 한국어 </option>
+        <option value="zh"> 中文 </option>
+      </select>
+
+      <label for="theme-select">Theme</label>
+      <select id="theme-select" class="form-select" aria-label="Widget theme">
+        <option value="light">Light</option>
+        <option value="dark" selected>Dark</option>
+      </select>
+    </div>
+
+    <div class="split-shell">
+      <div id="conversation-list" class="pane"></div>
+      <div id="message-log" class="pane"></div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const themes = {
+        dark: {
+          primary: '#111827',
+          onPrimary: '#e5e7eb',
+          message: '#1e293b',
+          onMessage: '#e2e8f0',
+          action: '#22c55e',
+          onAction: '#082f1d',
+          businessMessage: '#0b1220',
+          onBusinessMessage: '#e2e8f0',
+          background: '#0b1220',
+          onBackground: '#cbd5e1',
+          error: '#f87171',
+          onError: '#111827',
+          notify: '#7c3aed',
+          onNotify: '#f8fafc',
+          onSecondaryAction: '#cbd5e1'
+        },
+        light: {
+          primary: '#0f172a',
+          onPrimary: '#ffffff',
+          message: '#ffffff',
+          onMessage: '#0f172a',
+          action: '#2563eb',
+          onAction: '#ffffff',
+          businessMessage: '#f8fafc',
+          onBusinessMessage: '#0f172a',
+          background: '#f3f4f6',
+          onBackground: '#0f172a',
+          error: '#ef4444',
+          onError: '#ffffff',
+          notify: '#f59e0b',
+          onNotify: '#0f172a',
+          onSecondaryAction: '#0f172a'
+        }
+      };
+
+      const applyCustomization = (themeKey) => {
+        const theme = themes[themeKey] || themes.dark;
+        zE('messenger:set', 'customization', {
+          theme,
+          messageLog: { hideHeader: true }
+        });
+      };
+
+      // Apply initial theme and settings before render
+      applyCustomization('dark');
+
+      zE('messenger', 'render', {
+        mode: 'embedded',
+        conversationList: { targetElement: '#conversation-list' },
+        messageLog: { targetElement: '#message-log' }
+      });
+
+      const localeSelect = document.getElementById('locale-select');
+      if (localeSelect) {
+        localeSelect.addEventListener('change', function (event) {
+          const locale = event.target.value;
+          zE('messenger:set', 'locale', locale);
+        });
+      }
+
+      const themeSelect = document.getElementById('theme-select');
+      if (themeSelect) {
+        themeSelect.addEventListener('change', function (event) {
+          applyCustomization(event.target.value);
+        });
+      }
+    });
+  </script>
+</body>
+</html>
