@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Zendesk widget</title>
+
+  <!-- Zendesk Garden CSS -->
+  <link
+    rel="stylesheet"
+    href="https://cdn.jsdelivr.net/combine/npm/@zendeskgarden/css-bedrock,npm/@zendeskgarden/css-buttons,npm/@zendeskgarden/css-forms"
+  >
+
+  <style>
+    html,
+    body {
+      min-height: 100%;
+    }
+
+    body {
+      min-height: 100vh;
+      background: linear-gradient(135deg, #e6f4ff 0%, #eef8f0 45%, #f8f1ff 100%);
+      font-family: 'Helvetica Neue', sans-serif;
+      margin: 0;
+      padding: clamp(20px, 4vw, 40px);
+      color: #1f2933;
+    }
+
+    .container {
+      background: #fff;
+      max-width: 600px;
+      margin: 0 auto;
+      padding: 32px;
+      border-radius: 12px;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.05);
+    }
+
+    h1 {
+      font-size: 2rem;
+      margin-bottom: 16px;
+      color: #17394d;
+    }
+
+    p {
+      margin-bottom: 24px;
+      font-size: 1.1rem;
+    }
+
+    .button-group {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .form-group {
+      margin-bottom: 24px;
+    }
+
+    .c-txt__label {
+      display: block;
+      margin-bottom: 8px;
+    }
+
+    .c-txt,
+    .c-txt__input {
+      width: 100%;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Azal Miles widget demo</h1>
+    <p>Please select the site language</p>
+
+    <div class="form-group">
+      <div class="c-txt">
+        <label for="language-select" class="c-txt__label">Language</label>
+        <select id="language-select" class="c-txt__input c-txt__input--select">
+          <option selected value="az">Azerbaijani</option>
+          <option value="en-US">English</option>
+          <option value="ru">Russian</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="c-txt">
+        <label for="segment-input" class="c-txt__label">Set Segment</label>
+        <input type="text" id="segment-input" class="c-txt__input" placeholder="Enter segment code">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <div class="c-txt">
+        <label for="login-mode-select" class="c-txt__label">Login User</label>
+        <select id="login-mode-select" class="c-txt__input c-txt__input--select">
+          <option selected value="default">Default test user</option>
+          <option value="random">Random test user</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="button-group">
+      <button id="call-us-button" class="c-btn c-btn--primary">Call us now</button>
+      <button id="login-button" class="c-btn c-btn--primary">Login</button>
+      <button id="set-segment" class="c-btn c-btn--basic">Set Segment</button>
+      <button id="open-widget" class="c-btn c-btn--basic">Open Widget</button>
+      <button id="logout-button" class="c-btn c-btn--danger">Logout/Reset</button>
+    </div>
+  </div>
+
+  <!-- Zendesk Web Widget -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=bf4534b5-2827-42bd-a784-81e1f37653dd"></script>
+
+  <!-- Logic -->
+  <script>
+    window.zESettings = {
+      webWidget: {
+        offset: { horizontal: '100px', vertical: '150px' }
+      }
+    };
+
+    document.querySelector('#language-select').addEventListener('change', function () {
+      zE('messenger:set', 'locale', this.value);
+    });
+
+    document.querySelector('#call-us-button').onclick = () => {
+      zE('messenger:open', 'voice', 'a6501f93a5bf7ec95a7dfdfac028c89f');
+    };
+
+    document.querySelector('#open-widget').onclick = () => {
+      zE('messenger', 'open');
+    };
+
+    document.querySelector('#login-button').onclick = () => {
+      zE('messenger', 'loginUser', function (callback) {
+        const mode = document.querySelector('#login-mode-select').value;
+        const tokenBaseUrl = 'https://2d6hiazlkbslktrdl6nuw3bhdu0fbtzt.lambda-url.eu-west-1.on.aws';
+        const tokenUrl = `${tokenBaseUrl}?mode=${encodeURIComponent(mode)}`;
+
+        fetch(tokenUrl)
+          .then(response => {
+            if (!response.ok) throw new Error('Network error');
+            return response.json();
+          })
+          .then(data => callback(data.jwt))
+          .catch(error => console.error('JWT fetch error:', error));
+      });
+    };
+
+    document.querySelector('#logout-button').onclick = () => {
+      zE("messenger", "logoutUser");
+    };
+
+    document.querySelector('#set-segment').onclick = () => {
+      const segmentCode = document.querySelector('#segment-input').value;
+
+      if (!segmentCode) {
+        alert("Please enter a segment code.");
+        return;
+      }
+      
+      zE('messenger:set', 'conversationFields', [
+        { id: 33384237697938, value: segmentCode }
+      ]);
+    }
+    zE("messenger:on", "open", function () {
+      zE('messenger:set', 'conversationFields', [
+        { id: 33384233455122, value: window.location.href }
+      ]);
+      console.log(window.location.href);
+    });
+  </script>
+</body>
+</html>
