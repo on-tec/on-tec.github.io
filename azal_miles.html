@@ -86,7 +86,7 @@
     <div class="form-group">
       <div class="c-txt">
         <label for="segment-input" class="c-txt__label">Set Segment</label>
-        <input type="text" id="segment-input" class="c-txt__input" placeholder="Enter segment code">
+        <input type="text" id="segment-input" class="c-txt__input" placeholder="Enter segment code" value="silver">
       </div>
     </div>
 
@@ -103,7 +103,7 @@
     <div class="button-group">
       <button id="call-us-button" class="c-btn c-btn--primary">Call us now</button>
       <button id="login-button" class="c-btn c-btn--primary">Login</button>
-      <button id="set-segment" class="c-btn c-btn--basic">Set Segment</button>
+      <button id="set-segment" class="c-btn c-btn--basic">Update Segment</button>
       <button id="open-widget" class="c-btn c-btn--basic">Open Widget</button>
       <button id="logout-button" class="c-btn c-btn--danger">Logout/Reset</button>
     </div>
@@ -152,7 +152,7 @@
       zE("messenger", "logoutUser");
     };
 
-    document.querySelector('#set-segment').onclick = () => {
+    const applySegment = () => {
       const segmentCode = document.querySelector('#segment-input').value;
 
       if (!segmentCode) {
@@ -163,7 +163,10 @@
       zE('messenger:set', 'conversationFields', [
         { id: 33384237697938, value: segmentCode }
       ]);
-    }
+    };
+
+    document.querySelector('#set-segment').onclick = applySegment;
+    applySegment();
     zE("messenger:on", "open", function () {
       zE('messenger:set', 'conversationFields', [
         { id: 33384233455122, value: window.location.href }
