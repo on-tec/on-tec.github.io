@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Zendesk Support Chat – Embedded Demo</title>
+
+  <style>
+    :root {
+      --ink: #0f172a;
+      --muted: #64748b;
+      --surface: #ffffff;
+      --border: #e2e8f0;
+      --panel: #f8fafc;
+      --accent: #03363d;
+      --accent-light: #edf8f4;
+      --green: #038153;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      background: radial-gradient(circle at 10% 10%, #e0f2fe 0, transparent 30%),
+                  radial-gradient(circle at 90% 5%, #ccfbf1 0, transparent 25%),
+                  #f1f5f9;
+      color: var(--ink);
+      padding: 32px 16px;
+      min-height: 100vh;
+    }
+
+    .shell {
+      max-width: 960px;
+      margin: 0 auto;
+      background: var(--surface);
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.10);
+      border: 1px solid var(--border);
+      overflow: hidden;
+    }
+
+    .header {
+      padding: 28px 32px 20px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .header h1 {
+      font-size: 1.6rem;
+      letter-spacing: -0.02em;
+      margin-bottom: 4px;
+    }
+
+    .header p {
+      color: var(--muted);
+      font-size: 0.95rem;
+    }
+
+    .tabs {
+      display: flex;
+      border-bottom: 1px solid var(--border);
+      background: var(--panel);
+    }
+
+    .tab {
+      padding: 12px 24px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: var(--muted);
+      cursor: pointer;
+      border-bottom: 2px solid transparent;
+      transition: color 0.15s, border-color 0.15s;
+      user-select: none;
+    }
+
+    .tab:hover { color: var(--ink); }
+
+    .tab.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    /* Metadata form */
+    .meta-panel {
+      padding: 24px 32px;
+    }
+
+    .field-group {
+      margin-bottom: 20px;
+    }
+
+    .field-group label {
+      display: block;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .field-group .hint {
+      font-size: 0.78rem;
+      color: var(--muted);
+      margin-bottom: 6px;
+    }
+
+    .field-group input,
+    .field-group select {
+      width: 100%;
+      max-width: 400px;
+      padding: 9px 12px;
+      font-size: 0.9rem;
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      background: var(--surface);
+      color: var(--ink);
+      transition: border-color 0.15s;
+    }
+
+    .field-group input:focus,
+    .field-group select:focus {
+      outline: none;
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px rgba(3, 54, 61, 0.08);
+    }
+
+    .btn-apply {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #fff;
+      background: var(--accent);
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+
+    .btn-apply:hover { background: #024a54; }
+
+    .btn-apply:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      font-size: 0.82rem;
+      font-weight: 500;
+      padding: 4px 10px;
+      border-radius: 12px;
+      margin-left: 12px;
+    }
+
+    .status-badge.ready {
+      background: var(--accent-light);
+      color: var(--green);
+    }
+
+    .status-badge.pending {
+      background: #fef3c7;
+      color: #92400e;
+    }
+
+    /* Chat pane */
+    .chat-wrapper {
+      position: relative;
+      height: 640px;
+      background: #0b1220;
+      overflow: hidden;
+    }
+
+    .chat-wrapper iframe {
+      width: 100% !important;
+      height: 100% !important;
+      border: 0;
+      display: block;
+    }
+
+    .chat-placeholder {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      color: #64748b;
+      gap: 12px;
+      background: #0b1220;
+    }
+
+    .chat-placeholder svg {
+      width: 48px;
+      height: 48px;
+      opacity: 0.3;
+    }
+
+    .chat-placeholder p {
+      font-size: 0.95rem;
+      color: #94a3b8;
+    }
+
+    /* Info panel */
+    .info-panel {
+      padding: 24px 32px;
+    }
+
+    .info-card {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 20px;
+      margin-bottom: 16px;
+    }
+
+    .info-card h3 {
+      font-size: 0.95rem;
+      margin-bottom: 8px;
+    }
+
+    .info-card p, .info-card code {
+      font-size: 0.85rem;
+      color: var(--muted);
+      line-height: 1.6;
+    }
+
+    .info-card code {
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 4px;
+      font-family: 'SF Mono', Menlo, monospace;
+      font-size: 0.8rem;
+    }
+
+    .meta-summary {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 16px 20px;
+      margin: 0 32px 0;
+      font-size: 0.85rem;
+      color: var(--muted);
+    }
+
+    .meta-summary strong { color: var(--ink); }
+
+    .controls-bar {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 32px;
+      flex-wrap: wrap;
+    }
+
+    .controls-bar label {
+      font-weight: 600;
+      font-size: 0.85rem;
+      color: var(--ink);
+    }
+
+    .controls-bar select {
+      padding: 6px 10px;
+      font-size: 0.85rem;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: var(--surface);
+      color: var(--ink);
+    }
+
+    @media (max-width: 640px) {
+      body { padding: 12px 8px; }
+      .header, .meta-panel, .info-panel { padding: 20px 16px; }
+      .tab { padding: 10px 14px; font-size: 0.82rem; }
+      .chat-wrapper { height: 520px; }
+      .meta-summary { margin: 0 16px; }
+      .controls-bar { padding: 12px 16px; }
+    }
+  </style>
+
+  <!-- Disable auto-render so we control embedded containers -->
+  <script>
+    window.zEMessenger = { autorender: false };
+  </script>
+
+  <!-- Zendesk Messaging Widget -->
+  <script id="ze-snippet" src="https://static.zdassets.com/ekr/snippet.js?key=81008090-2119-4b46-8529-1885edd7ece3"></script>
+</head>
+<body>
+
+  <div class="shell">
+    <div class="header">
+      <h1>Support Chat</h1>
+      <p>Embedded Zendesk Messaging widget with channel metadata collection</p>
+    </div>
+
+    <div class="tabs">
+      <div class="tab active" data-tab="metadata">Metadata</div>
+      <div class="tab" data-tab="chat">Support Chat</div>
+      <div class="tab" data-tab="info">Info</div>
+    </div>
+
+    <!-- Metadata tab -->
+    <div id="tab-metadata" class="tab-content active">
+      <div class="meta-panel">
+        <div class="field-group">
+          <label for="subdomain-field">Subdomain</label>
+          <div class="hint">Zendesk field 360015947113 — the customer's subdomain identifier</div>
+          <input type="text" id="subdomain-field" placeholder="e.g. acme-corp">
+        </div>
+
+        <div class="field-group">
+          <label for="product-field">Product / App</label>
+          <div class="hint">Zendesk field 360004328899 — the channel application</div>
+          <select id="product-field">
+            <option value="">— Select a product —</option>
+            <option value="oapps__ig_suite">Instagramer Suite</option>
+            <option value="oapps_instagramer">Instagramer (legacy)</option>
+            <option value="oapps_whatsapper">Whatsapper</option>
+            <option value="oapps__tiktok">TikTok</option>
+            <option value="oapps_telegramer">Telegramer</option>
+            <option value="oapps__discorder">Discorder</option>
+            <option value="oapps__3cx">3CX for Zendesk</option>
+            <option value="asterisk_for_zendesk">Asterisk for Zendesk</option>
+            <option value="oapps_facebook_reviews">Facebook Reviews</option>
+            <option value="oapps_viberer">Viberer</option>
+            <option value="oapps__youtube_comments">Youtube Comments</option>
+            <option value="oapps__exporter">Advanced Export</option>
+            <option value="oapps_forwarder">Forwarder</option>
+            <option value="oapps_notifier">Notifier</option>
+            <option value="oapps__access_logs">Access logs</option>
+            <option value="oapps__delayer">Delayer</option>
+            <option value="oapps__reply_to_email_selector">Reply to Email Selector</option>
+            <option value="oapps_resurrect">Resurrect</option>
+            <option value="oapps::tweet_preview">Tweet Preview</option>
+            <option value="zendesk_support">Zendesk Suite (any product)</option>
+            <option value="product_custom">Custom Development</option>
+            <option value="oapps__none">Not related to any existing product</option>
+          </select>
+        </div>
+
+        <div class="field-group">
+          <label for="visitor-name">Visitor Name <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <input type="text" id="visitor-name" placeholder="e.g. John Doe">
+        </div>
+
+        <div class="field-group">
+          <label for="visitor-email">Visitor Email <span style="font-weight:400;color:var(--muted)">(optional)</span></label>
+          <input type="email" id="visitor-email" placeholder="e.g. john@acme-corp.com">
+        </div>
+
+        <button class="btn-apply" id="btn-apply-meta" disabled>
+          Apply &amp; Open Chat
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M6 3l5 5-5 5" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </button>
+        <span class="status-badge pending" id="meta-status">Subdomain required</span>
+      </div>
+    </div>
+
+    <!-- Chat tab -->
+    <div id="tab-chat" class="tab-content">
+      <div id="meta-summary-bar" class="meta-summary" style="display:none; margin-top:16px"></div>
+
+      <div class="controls-bar" id="chat-controls" style="display:none">
+        <label for="theme-select">Theme</label>
+        <select id="theme-select">
+          <option value="dark" selected>Dark</option>
+          <option value="light">Light</option>
+        </select>
+
+        <label for="locale-select">Language</label>
+        <select id="locale-select">
+          <option selected value="en-us">English US</option>
+          <option value="es">Spanish</option>
+          <option value="de">German</option>
+          <option value="lt">Lithuanian</option>
+          <option value="lv">Latvian</option>
+          <option value="et">Estonian</option>
+          <option value="uk">Українська</option>
+          <option value="ru">Russian</option>
+          <option value="kk">Қазақша</option>
+          <option value="ka">ქართული</option>
+          <option value="hy">Armenian</option>
+          <option value="az">Azerbaijani</option>
+          <option value="uz">ўзбекча</option>
+          <option value="ar">Arabic</option>
+          <option value="hi">हिन्दी</option>
+          <option value="tr">Türkçe</option>
+          <option value="ko">한국어</option>
+          <option value="zh">中文</option>
+        </select>
+      </div>
+
+      <div class="chat-wrapper" id="chat-wrapper">
+        <div class="chat-placeholder" id="chat-placeholder">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          <p>Fill in the metadata to start a chat session</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Info tab -->
+    <div id="tab-info" class="tab-content">
+      <div class="info-panel">
+        <div class="info-card">
+          <h3>Widget Configuration</h3>
+          <p>
+            Instance: <code>pdi-ontec-zd</code><br>
+            Key: <code>81008090-2119-4b46-8529-1885edd7ece3</code><br>
+            Mode: Messaging (embedded)
+          </p>
+        </div>
+        <div class="info-card">
+          <h3>Metadata Fields</h3>
+          <p>
+            <strong>Subdomain</strong> — Field ID: <code>360015947113</code><br>
+            <strong>Product / App</strong> — Field ID: <code>360004328899</code> (dropdown)<br>
+            Passed via <code>zE('messenger:set', 'conversationFields', [...])</code>
+          </p>
+        </div>
+        <div class="info-card">
+          <h3>Integration Notes</h3>
+          <p>
+            This demo collects the customer subdomain and product before rendering the
+            embedded messaging widget. Metadata is attached via conversation fields so
+            agents can see which channel application the request originated from.
+            The widget renders in embedded mode using
+            <code>zE('messenger', 'render', { mode: 'embedded', ... })</code>.
+          </p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const SUBDOMAIN_FIELD_ID = '360015947113';
+      const PRODUCT_FIELD_ID = '360004328899';
+      let widgetRendered = false;
+
+      const themes = {
+        dark: {
+          primary: '#111827',
+          onPrimary: '#e5e7eb',
+          message: '#1e293b',
+          onMessage: '#e2e8f0',
+          action: '#22c55e',
+          onAction: '#082f1d',
+          businessMessage: '#0b1220',
+          onBusinessMessage: '#e2e8f0',
+          background: '#0b1220',
+          onBackground: '#cbd5e1',
+          error: '#f87171',
+          onError: '#111827',
+          notify: '#7c3aed',
+          onNotify: '#f8fafc',
+          onSecondaryAction: '#cbd5e1'
+        },
+        light: {
+          primary: '#0f172a',
+          onPrimary: '#ffffff',
+          message: '#ffffff',
+          onMessage: '#0f172a',
+          action: '#2563eb',
+          onAction: '#ffffff',
+          businessMessage: '#f8fafc',
+          onBusinessMessage: '#0f172a',
+          background: '#f3f4f6',
+          onBackground: '#0f172a',
+          error: '#ef4444',
+          onError: '#ffffff',
+          notify: '#f59e0b',
+          onNotify: '#0f172a',
+          onSecondaryAction: '#0f172a'
+        }
+      };
+
+      // Tab switching
+      document.querySelectorAll('.tab').forEach(tab => {
+        tab.addEventListener('click', function () {
+          document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+          document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+          this.classList.add('active');
+          document.getElementById('tab-' + this.dataset.tab).classList.add('active');
+        });
+      });
+
+      // Subdomain field validation
+      const subdomainInput = document.getElementById('subdomain-field');
+      const applyBtn = document.getElementById('btn-apply-meta');
+      const statusBadge = document.getElementById('meta-status');
+
+      subdomainInput.addEventListener('input', function () {
+        const hasValue = this.value.trim().length > 0;
+        applyBtn.disabled = !hasValue;
+        if (hasValue) {
+          statusBadge.className = 'status-badge ready';
+          statusBadge.textContent = 'Ready';
+        } else {
+          statusBadge.className = 'status-badge pending';
+          statusBadge.textContent = 'Subdomain required';
+        }
+      });
+
+      // Apply metadata and render embedded chat
+      applyBtn.addEventListener('click', function () {
+        const subdomain = subdomainInput.value.trim();
+        const productSelect = document.getElementById('product-field');
+        const productValue = productSelect.value;
+        const productLabel = productSelect.selectedOptions[0]?.textContent || '';
+        const visitorName = document.getElementById('visitor-name').value.trim();
+        const visitorEmail = document.getElementById('visitor-email').value.trim();
+
+        if (!subdomain) return;
+
+        // Set conversation fields (metadata)
+        const conversationFields = [
+          { id: SUBDOMAIN_FIELD_ID, value: subdomain }
+        ];
+        if (productValue) {
+          conversationFields.push({ id: PRODUCT_FIELD_ID, value: productValue });
+        }
+
+        zE('messenger:set', 'conversationFields', conversationFields);
+
+        // Set conversation tags for routing
+        const tags = ['embedded_chat'];
+        if (productValue) tags.push(productValue);
+        zE('messenger:set', 'conversationTags', tags);
+
+        // Update summary bar
+        const summaryBar = document.getElementById('meta-summary-bar');
+        let summaryHTML = '<strong>Subdomain:</strong> ' + escapeHTML(subdomain);
+        if (productValue) summaryHTML += ' &nbsp;·&nbsp; <strong>Product:</strong> ' + escapeHTML(productLabel);
+        if (visitorName) summaryHTML += ' &nbsp;·&nbsp; <strong>Name:</strong> ' + escapeHTML(visitorName);
+        if (visitorEmail) summaryHTML += ' &nbsp;·&nbsp; <strong>Email:</strong> ' + escapeHTML(visitorEmail);
+        summaryBar.innerHTML = summaryHTML;
+        summaryBar.style.display = 'block';
+
+        // Show controls
+        document.getElementById('chat-controls').style.display = 'flex';
+
+        // Remove placeholder
+        const placeholder = document.getElementById('chat-placeholder');
+        if (placeholder) placeholder.style.display = 'none';
+
+        // Switch to chat tab
+        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+        document.querySelectorAll('.tab-content').forEach(tc => tc.classList.remove('active'));
+        document.querySelector('[data-tab="chat"]').classList.add('active');
+        document.getElementById('tab-chat').classList.add('active');
+
+        // Render the embedded widget (only once)
+        if (!widgetRendered) {
+          // Apply theme before render
+          zE('messenger:set', 'customization', {
+            theme: themes.dark,
+            messageLog: { hideHeader: true }
+          });
+
+          zE('messenger', 'render', {
+            mode: 'embedded',
+            widget: { targetElement: '#chat-wrapper' }
+          }, function errorCallback(error) {
+            if (error) {
+              console.error('Zendesk render error:', error.message, error.reason);
+            }
+          });
+
+          widgetRendered = true;
+        }
+      });
+
+      // Theme control
+      document.getElementById('theme-select').addEventListener('change', function (e) {
+        const themeKey = e.target.value;
+        const wrapper = document.getElementById('chat-wrapper');
+
+        zE('messenger:set', 'customization', {
+          theme: themes[themeKey] || themes.dark,
+          messageLog: { hideHeader: true }
+        });
+
+        wrapper.style.background = themeKey === 'light' ? '#f3f4f6' : '#0b1220';
+      });
+
+      // Locale control
+      document.getElementById('locale-select').addEventListener('change', function (e) {
+        zE('messenger:set', 'locale', e.target.value);
+      });
+
+      function escapeHTML(str) {
+        const div = document.createElement('div');
+        div.textContent = str;
+        return div.innerHTML;
+      }
+    });
+  </script>
+</body>
+</html>
